@@ -1,6 +1,7 @@
-import { Actor, Engine, Vector, ScreenElement, Color, Rectangle } from "excalibur"
+import { Actor, Engine, Vector, ScreenElement, Color, Rectangle, Label, FontUnit, Font } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
-import { Orb } from './orb.js'
+import { Orb } from './orbs.js'
+import { vector } from "excalibur/build/dist/Util/DrawUtil.js"
 
 export class HpBar extends ScreenElement {
 
@@ -26,5 +27,16 @@ export class HpBar extends ScreenElement {
 
     updateScore() {
         this.healthbar.scale = new Vector(0.5, 1)
+    }
+}
+
+export class PlayButton extends ScreenElement {
+
+    onInitialize(engine) {
+        this.graphics.use(Resources.playButton.toSprite())
+        this.scale = new Vector(0.6, 0.6)
+        this.pos = new Vector(680, 480)
+
+        this.on("pointerup", () => this.scene.engine.playGame())
     }
 }

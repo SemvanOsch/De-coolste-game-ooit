@@ -1,11 +1,20 @@
 import '../css/style.css'
-import { Actor, CollisionContact, Engine, RotateTo, Vector, Timer, Label, FontUnit, Font, Keys } from "excalibur"
+import { Actor, Engine, Vector, Timer, Keys, Label, Font, FontUnit, Color } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
-import { Fish } from './fish.js'
-import { Orb } from './orb.js'
+import { TowerNum1 } from './towers.js'
+import { Orb, TankOrb } from './orbs.js'
+import { TowerOrb } from './towerPlace.js'
 import { Background } from './background.js'
+import { PlayButton } from './UI.js'
 
 export class Game extends Engine {
+    scoreText
+    orbTimer = 0
+    orbCount = 0
+    orbThisWave
+    waveStarted = false
+    waveCount = 1
+    goldAmount = 500
 
     constructor() {
         super({ width: 800, height: 600 })
@@ -13,49 +22,72 @@ export class Game extends Engine {
     }
 
     startGame() {
-        this.score = 0
-
-        console.log("start de game!")
-
         const bg = new Background
         this.add(bg)
+        const playButton = new PlayButton
+        this.add(playButton)
+        this.setLabel()
+        this.towerSpawn()
+    }
 
-        this.fishSpawn()
-        this.fishSpawn2()
-
-        this.label = new Label({
-            text: 'Score: 0',
-            pos: new Vector(10, 10),
+    setLabel() {
+        this.moneyLabel = new Label({
+            text: `${this.goldAmount} / ${this.waveCount}`,
+            pos: new Vector(20, 20),
             font: new Font({
-                family: 'impact',
-                size: 24,
-                unit: FontUnit.Px
+                unit: FontUnit.Px,
+                size: 20,
+                color: Color.White
             })
         })
-        this.add(this.label)
-
-        this.timer = new Timer({
-            fcn: () => this.fishSpawn2(),
-            interval: 2000,
-            repeats: true
-        })
-        this.add(this.timer)
-        this.timer.start()
+        this.add(this.moneyLabel)
     }
 
-    fishSpawn() {
-        const fish = new Fish()
-        this.add(fish)
+    updateGold(amount) {
+        this.goldAmount += amount
+        this.moneyLabel.text = `${this.goldAmount} / ${this.waveCount}`
     }
 
-    fishSpawn2() {
+    towerSpawn() {
+        const towerLocations = [
+            new Vector(400, 300),
+            new Vector(150, 180),
+            new Vector(600, 240)
+        ]
+
+        for (let i = 0; i < towerLocations.length; i++) {
+            const towerOrb = new TowerOrb()
+            this.add(towerOrb)
+            towerOrb.setPosition(towerLocations[i].x, towerLocations[i].y)
+        }
+    }
+
+    orbSpawn() {
         const orb = new Orb()
+        const tankOrb = new TankOrb()
         this.add(orb)
     }
 
-    updateScore(scoreValue) {
-        this.score += scoreValue
-        this.label.text = `Score: ${this.score}`
+    onPostUpdate() {
+        if (this.waveStarted === true) {
+            if (this.orbTimer < 150 / (this.waveCount * 0.5)) {
+                this.orbTimer++
+            } else if (this.orbCount < this.orbThisWave) {
+                this.orbSpawn()
+                this.orbTimer = 0
+            } else if (this.orbCount === this.orbThisWave) {
+                this.waveStarted = false
+                this.orbCount = 0
+                this.waveCount++
+            }
+        }
+    }
+
+    playGame() {
+        if (this.waveStarted === false) {
+            this.waveStarted = true
+            this.orbThisWave = 6 * this.waveCount
+        }
     }
 }
 
