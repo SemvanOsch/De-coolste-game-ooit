@@ -27,6 +27,7 @@ export class Level extends Scene {
     }
 
     onActivate() {
+        //hoi
         this.playerHp = 25
         const bg = new Background
         bg.scale = new Vector(0.67, 0.67)
