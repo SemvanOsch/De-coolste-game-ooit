@@ -66,10 +66,6 @@ export class TowerNum1 extends Actor {
         if (this.attackCd < this.attackSpeed) {
             this.attackCd++
         }
-
-        // if (this.floatingUp === true){
-        //     this.pos.y -= 0.1
-        // } 
     }
 
     rangeEnter(event) {

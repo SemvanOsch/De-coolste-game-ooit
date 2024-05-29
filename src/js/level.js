@@ -16,16 +16,18 @@ export class Level extends Scene {
     waveStarted = false
     waveCount = 1
     goldAmount = 500
-    playerHp = 10
+    playerHp
     playButton;
     orb;
+    difficulty = 1
 
     constructor() {
         super()
-        // this.start(ResourceLoader).then(() => this.startGame())
+
     }
 
     onActivate() {
+        this.playerHp = 25
         const bg = new Background
         bg.scale = new Vector(0.67, 0.67)
         this.add(bg)
@@ -121,5 +123,6 @@ export class Level extends Scene {
     gameOver() {
         this.engine.goToScene('game-over')
         this.waveStarted = false;
+        this.difficulty * 1.2
     }
 }
