@@ -9,9 +9,9 @@ export class TowerOrb extends Actor {
     }
 
     onInitialize(engine) {
-        this.graphics.use(Resources.towerOrb.toSprite())
+        // this.graphics.use(Resources.towerOrb.toSprite())
         this.scale = new Vector(0.2, 0.2)
-        this.on("pointerup", () => this.onClick())
+        this.on("pointerdown", () => this.onClick())
     }
 
     setPosition(xpos, ypos) {
@@ -19,13 +19,13 @@ export class TowerOrb extends Actor {
     }
 
     onClick() {
-        if (this.scene.engine.goldAmount >= 200) {
+        if (this.scene.goldAmount >= 200) {
             const tower1 = new TowerNum1
-            this.scene.engine.add(tower1)
+            this.scene.add(tower1)
             tower1.setPos(this.pos.x, this.pos.y)
 
             this.kill()
-            this.scene.engine.updateGold(-200)
+            this.scene.updateGold(-200, 0)
         }
 
     }

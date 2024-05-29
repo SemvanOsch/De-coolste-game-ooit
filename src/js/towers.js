@@ -1,17 +1,21 @@
-import { Actor, Engine, Vector, Color, Keys, CircleCollider, Timer, vec } from "excalibur"
+import { Actor, Engine, Vector, Color, Keys, CircleCollider, Timer, vec, range } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
-import { Orb, TankOrb } from './orbs.js'
-import { delay } from "excalibur/build/dist/Util/Util.js"
+import { Orb } from './orbs.js'
+import { Bullet } from './bullet.js'
 
 export class TowerNum1 extends Actor {
     level1 = Resources.Tower1_1.toSprite()
     level2 = Resources.Tower1_2.toSprite()
     level3 = Resources.Tower1_3.toSprite()
+    bullet;
+    floatingUp = true;
+
     constructor() {
         super({ width: Resources.Tower1_1.width, height: Resources.Tower1_1.height })
     }
 
     onInitialize(engine) {
+        this.bullet = new Bullet
         this.level = 1
         this.towerDmg = 2
         this.attackSpeed = 120
@@ -19,16 +23,14 @@ export class TowerNum1 extends Actor {
 
         console.log(this.level)
 
-        this.scale = new Vector(0.2, 0.2)
+        this.scale = new Vector(0.3, 0.3)
         this.graphics.use(this.level1)
 
-        this.towerRange = new CircleCollider({
-            radius: 1000
-        })
-        this.collider.set(this.towerRange)
+        let rangeDetector = new Actor({ radius: 1000 })
+        this.addChild(rangeDetector)
 
-        this.on("pointerup", () => this.towerUpgrade())
-        this.on('precollision', (event) => this.rangeEnter(event))
+        this.on("pointerdown", () => this.towerUpgrade())
+        rangeDetector.on('precollision', (event) => this.rangeEnter(event))
 
     }
 
@@ -37,10 +39,11 @@ export class TowerNum1 extends Actor {
     }
 
     towerUpgrade() {
+
         switch (this.level) {
             case 1:
-                if (this.scene.engine.goldAmount >= 250) {
-                    this.scene.engine.updateGold(-250)
+                if (this.scene.goldAmount >= 250) {
+                    this.scene.updateGold(-250, 0)
                     this.level++
                     this.towerDmg += 3
                     this.attackCd = 0
@@ -48,8 +51,8 @@ export class TowerNum1 extends Actor {
                     break
                 }
             case 2:
-                if (this.scene.engine.goldAmount >= 450) {
-                    this.scene.engine.updateGold(-450)
+                if (this.scene.goldAmount >= 450) {
+                    this.scene.updateGold(-450, 0)
                     this.level++
                     this.attackSpeed -= 30
                     this.attackCd = 0
@@ -63,12 +66,16 @@ export class TowerNum1 extends Actor {
         if (this.attackCd < this.attackSpeed) {
             this.attackCd++
         }
+
+        // if (this.floatingUp === true){
+        //     this.pos.y -= 0.1
+        // } 
     }
 
     rangeEnter(event) {
-        if (event.other instanceof Orb || event.other instanceof TankOrb) {
+        if (event.other instanceof Orb) {
             if (this.attackCd === this.attackSpeed) {
-                event.other.hpUpdate(this.towerDmg)
+                this.scene.bulletSpawn(this.pos.x, this.pos.y, event.other, this.towerDmg)
                 this.attackCd = 0
             }
         }
