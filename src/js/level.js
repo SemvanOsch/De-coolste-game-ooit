@@ -14,8 +14,8 @@ export class Level extends Scene {
     orbCount = 0
     orbThisWave
     waveStarted = false
-    waveCount = 15
-    goldAmount = 50000
+    waveCount = 1
+    goldAmount = 500
     playerHp
     playButton;
     orb;
