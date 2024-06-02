@@ -5,6 +5,7 @@ const Resources = {
     Orb: new ImageSource('images/orb.png'),
     TankOrb: new ImageSource('images/orb2.png'),
     SpeedOrb: new ImageSource('images/orb3.png'),
+    BossOrb: new ImageSource('images/orb4.png'),
     towerOrb: new ImageSource('images/towerOrb.png'),
     playButton: new ImageSource('images/playbutton.png'),
     playingButton: new ImageSource('images/playingbutton.png'),
@@ -13,6 +14,7 @@ const Resources = {
     Tower1_1: new ImageSource('images/towers/tower1/towercrystal.png'),
     Tower1_2: new ImageSource('images/towers/tower1/towercrystallvl2.png'),
     Tower1_3: new ImageSource('images/towers/tower1/towercrystallvl3.png'),
+    Tower1_4: new ImageSource('images/towers/tower1/towercrystallvl4.png'),
     EndScreen: new ImageSource('images/endscreen.png'),
     IntroScreen: new ImageSource('images/mapbgblur.png')
 }

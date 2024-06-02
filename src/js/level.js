@@ -14,8 +14,8 @@ export class Level extends Scene {
     orbCount = 0
     orbThisWave
     waveStarted = false
-    waveCount = 1
-    goldAmount = 500
+    waveCount = 15
+    goldAmount = 50000
     playerHp
     playButton;
     orb;
@@ -27,7 +27,6 @@ export class Level extends Scene {
     }
 
     onActivate() {
-        //hoi
         this.playerHp = 25
         const bg = new Background
         bg.scale = new Vector(0.67, 0.67)
@@ -76,8 +75,12 @@ export class Level extends Scene {
 
     orbSpawn() {
         let randNum = Math.random()
+        this.orbCount++
 
-        if (randNum <= 0.2 && this.waveCount >= 2) {
+        if (this.waveCount === 15) {
+            this.orb = new Orb(1000, 1000, 70, 1000, Resources.BossOrb.toSprite())
+            this.orbCount = this.orbThisWave
+        } else if (randNum <= 0.2 && this.waveCount >= 2) {
             this.orb = new Orb(25, 25, 100, 80, Resources.TankOrb.toSprite())
         } else if (randNum <= 0.4 && this.waveCount >= 3) {
             this.orb = new Orb(8, 8, 400, 60, Resources.SpeedOrb.toSprite())
@@ -86,7 +89,6 @@ export class Level extends Scene {
         }
 
         this.add(this.orb)
-        this.orbCount++
     }
 
     bulletSpawn(x, y, target, dmg) {

@@ -7,8 +7,8 @@ export class TowerNum1 extends Actor {
     level1 = Resources.Tower1_1.toSprite()
     level2 = Resources.Tower1_2.toSprite()
     level3 = Resources.Tower1_3.toSprite()
+    level4 = Resources.Tower1_4.toSprite()
     bullet;
-    floatingUp = true;
 
     constructor() {
         super({ width: Resources.Tower1_1.width, height: Resources.Tower1_1.height })
@@ -54,9 +54,18 @@ export class TowerNum1 extends Actor {
                 if (this.scene.goldAmount >= 450) {
                     this.scene.updateGold(-450, 0)
                     this.level++
-                    this.attackSpeed -= 30
+                    this.attackSpeed -= 40
                     this.attackCd = 0
                     this.graphics.use(this.level3)
+                    break
+                }
+            case 3:
+                if (this.scene.goldAmount >= 1300) {
+                    this.scene.updateGold(-1300, 0)
+                    this.level++
+                    this.towerDmg += 5
+                    this.attackCd = 0
+                    this.graphics.use(this.level4)
                     break
                 }
         }

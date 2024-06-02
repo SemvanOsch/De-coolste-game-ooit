@@ -55,6 +55,9 @@ export class Orb extends Actor {
         } else {
             this.kill()
             this.scene.updateGold(this.moneyOnKill, 0)
+            if (this.maxHp === 1000) {
+                this.scene.gameOver()
+            }
         }
     }
 
