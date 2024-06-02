@@ -1,6 +1,5 @@
 import { Actor, Engine, Vector, Label, Font, FontUnit } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
-import { HpBar } from './UI.js'
 
 export class Orb extends Actor {
     maxHp;
